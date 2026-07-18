@@ -1,3 +1,4 @@
+cd ~/NEKA-NEW
 cat > buildozer.spec << 'EOF'
 [app]
 
@@ -32,7 +33,6 @@ android.gradle_dependencies = 'com.android.support:support-annotations:28.0.0'
 android.archs = arm64-v8a
 
 [buildozer]
-
 log_level = 2
 warn_on_root = 1
 EOF

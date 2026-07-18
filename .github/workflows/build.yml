@@ -1,3 +1,4 @@
+cat > .github/workflows/build.yml << 'EOF'
 name: Build APK
 
 on:
@@ -36,11 +37,15 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Build APK
+      - name: Clean previous builds (if any)
+        run: |
+          buildozer android clean
+
+      - name: Build APK with verbose logging
         env:
           ANDROID_SDK_ACCEPT_LICENSE: true
         run: |
-          buildozer android debug deploy 2>&1 | tee build.log
+          buildozer android debug deploy -- --accept-sdk-license -v 2>&1 | tee build.log
 
       - name: Upload build log
         if: always()
@@ -56,3 +61,4 @@ jobs:
           name: VGX-SPACE-8-APK
           path: bin/*.apk
           if-no-files-found: error
+EOF
