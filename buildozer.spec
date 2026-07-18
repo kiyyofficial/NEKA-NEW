@@ -21,10 +21,11 @@ icon.filename = icon.png
 
 android.permissions = INTERNET, ACCESS_NETWORK_STATE, WAKE_LOCK
 
-android.api = 31
+android.api = 30
 android.minapi = 21
 android.ndk = 23b
 android.sdk = 30
+android.accept_sdk_license = True
 
 android.gradle_dependencies = 'com.android.support:support-annotations:28.0.0'
 
