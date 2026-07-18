@@ -39,7 +39,7 @@ jobs:
             openjdk-17-jdk \
             python3-pip \
             autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 \
+            zlib1g-dev libncurses-dev \
             cmake libffi-dev libssl-dev
 
       - name: Install Python packages
