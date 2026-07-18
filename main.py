@@ -1,6 +1,7 @@
+cat > main.py << 'EOF'
 """
-VGX SPACE - XAZEX EDITION
-Fitur: Splash animasi, Side Menu, Floating Monitor, Performance Mode, Fan Control, RGB, Statistics, Game Launcher
+VGX SPACE 8 - XAZEX EDITION
+Aplikasi Game Space dengan fitur: Splash, Side Menu, Floating Monitor, Performance, Fan, RGB, Stats, Game Launcher
 Dibuat untuk KiYY OFFICIAL
 """
 
@@ -23,19 +24,12 @@ from kivy.clock import Clock
 from kivy.graphics import Color, Rectangle, Line
 from kivy.animation import Animation
 from kivy.core.window import Window
-from kivy.properties import NumericProperty, StringProperty, BooleanProperty
-from kivy.utils import get_color_from_hex
-
 import random
-import math
-import os
 
 VGX_RED = [1, 0.1, 0.1, 1]
 VGX_DARK = [0.04, 0.04, 0.04, 1]
 VGX_GRAY = [0.12, 0.12, 0.12, 1]
-VGX_LIGHT = [0.2, 0.2, 0.2, 1]
 WHITE = [1, 1, 1, 1]
-VGX_BLUE = [0.0, 0.5, 1.0, 1]
 
 GAME_LIST = [
     "Cyberpunk 2077",
@@ -55,11 +49,9 @@ class SplashScreen(Widget):
         super().__init__(**kwargs)
         self.size = Window.size
         self.pos = (0, 0)
-
         with self.canvas.before:
             Color(*VGX_DARK)
             self.bg = Rectangle(pos=self.pos, size=self.size)
-
         self.logo_text = Label(
             text="[b]VGX[/b]",
             markup=True,
@@ -70,7 +62,6 @@ class SplashScreen(Widget):
             size=(200, 60)
         )
         self.add_widget(self.logo_text)
-
         self.sub_text = Label(
             text="SPACE 8",
             font_size='18sp',
@@ -80,7 +71,6 @@ class SplashScreen(Widget):
             size=(300, 40)
         )
         self.add_widget(self.sub_text)
-
         self.opacity = 0
         self.logo_text.opacity = 0
         self.sub_text.opacity = 0
@@ -118,13 +108,11 @@ class FloatingMonitor(Widget):
         self.rpm = 0
         self.is_dragging = False
         self.drag_start = (0, 0)
-
         with self.canvas.before:
             Color(*VGX_GRAY)
             self.rect = Rectangle(pos=self.pos, size=self.size)
             Color(*VGX_RED)
             self.border = Line(rectangle=(self.pos[0], self.pos[1], self.size[0], self.size[1]), width=2)
-
         content = BoxLayout(orientation='vertical', padding=5, spacing=2)
         title = Label(text="[b]VGX MONITOR[/b]", markup=True, color=VGX_RED, font_size='12sp', size_hint_y=None, height=22)
         content.add_widget(title)
@@ -139,9 +127,7 @@ class FloatingMonitor(Widget):
         self.rpm_label = Label(text="RPM: 0", color=WHITE, font_size='10sp', size_hint_y=None, height=18)
         content.add_widget(self.rpm_label)
         self.add_widget(content)
-
         self.bind(pos=self._update_canvas, size=self._update_canvas)
-        self.visible = True
 
     def _update_canvas(self, instance, value):
         self.canvas.before.clear()
@@ -195,17 +181,14 @@ class SideMenu(BoxLayout):
         self.orientation = 'vertical'
         self.size_hint_x = 0.3
         self.pos_hint = {'x': -0.3}
-        self.bg_color = VGX_GRAY
         with self.canvas.before:
             Color(*VGX_GRAY)
             self.rect = Rectangle(pos=self.pos, size=self.size)
         self.bind(pos=self._update_rect, size=self._update_rect)
-
         header = BoxLayout(size_hint_y=0.1, padding=10)
         header.add_widget(Label(text="VGX", color=VGX_RED, font_size='22sp', bold=True))
         header.add_widget(Label(text="SPACE 8", color=WHITE, font_size='14sp'))
         self.add_widget(header)
-
         menu_items = [
             ("Dashboard", "dashboard"),
             ("Performance", "performance"),
@@ -221,7 +204,6 @@ class SideMenu(BoxLayout):
             btn.screen_name = screen
             btn.bind(on_press=self._on_menu_press)
             self.add_widget(btn)
-
         self.add_widget(Label(text="", size_hint_y=0.5))
 
     def _on_menu_press(self, instance):
@@ -435,10 +417,8 @@ class VGXSpaceRoot(FloatLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.main_visible = False
-
         self.side_menu = SideMenu()
         self.add_widget(self.side_menu)
-
         self.sm = ScreenManager()
         self.sm.add_widget(DashboardScreen(name='dashboard'))
         self.sm.add_widget(PerformanceScreen(name='performance'))
@@ -451,32 +431,25 @@ class VGXSpaceRoot(FloatLayout):
         self.sm.current = 'dashboard'
         self.sm.opacity = 0
         self.add_widget(self.sm)
-
         self.floating_monitor = FloatingMonitor()
         self.floating_monitor.opacity = 0
         self.add_widget(self.floating_monitor)
-
         self.menu_btn = Button(text='☰', size_hint=(None, None), size=(50, 50),
                                background_normal='', background_color=VGX_RED,
                                pos_hint={'x': 0.02, 'top': 0.95}, opacity=0)
         self.menu_btn.bind(on_press=self.toggle_menu)
         self.add_widget(self.menu_btn)
-
         self.mode = "Balanced"
         self.fan_rpm = 0
         self.rgb_on = True
         self.rgb_color = [0, 1, 0, 1]
         self.current_game = None
         self.is_floating_visible = False
-
         self.splash = SplashScreen()
         self.add_widget(self.splash)
-
         Clock.schedule_interval(self.update_stats, 0.5)
 
     def show_main(self):
-        self.sm.opacity = 0
-        self.menu_btn.opacity = 0
         anim = Animation(opacity=1, duration=0.8, t='out_quad')
         anim.start(self.sm)
         anim.start(self.menu_btn)
@@ -513,10 +486,7 @@ class VGXSpaceRoot(FloatLayout):
 
     def toggle_floating(self):
         self.is_floating_visible = not self.is_floating_visible
-        if self.is_floating_visible:
-            self.floating_monitor.opacity = 1
-        else:
-            self.floating_monitor.opacity = 0
+        self.floating_monitor.opacity = 1 if self.is_floating_visible else 0
         return self.is_floating_visible
 
     def update_stats(self, dt):
@@ -530,11 +500,9 @@ class VGXSpaceRoot(FloatLayout):
             fps = random.randint(45, 90)
         else:
             fps = random.randint(60, 144)
-
         stats_screen = self.sm.get_screen('stats')
         if stats_screen:
             stats_screen.update_stats(cpu, gpu, temp_cpu, temp_gpu, fps, self.fan_rpm)
-
         if self.is_floating_visible:
             self.floating_monitor.update_values(fps, cpu, gpu, temp_cpu, self.fan_rpm)
 
@@ -547,3 +515,4 @@ class VGXSpaceApp(App):
 
 if __name__ == '__main__':
     VGXSpaceApp().run()
+EOF
